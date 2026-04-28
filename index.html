@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>신흥1구역 추가분담금 계산기</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body, #page, #content, #primary, .site-content, main, .entry-content,
+  .wp-site-blocks, .is-layout-flow, .wp-block-post-content,
+  .site-container, #wrapper, #inner-wrap {
+    background: #f5f6f8 !important;
+    margin: 0 !important; padding: 0 !important; max-width: 100% !important;
+  }
+
+  :root {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --surface2: #f0f1f3;
+    --border: #e2e4e9;
+    --accent: #2563eb;
+    --accent2: #4f46e5;
+    --yellow: #d97706;
+    --yellow-bg: #fffbeb;
+    --yellow-border: #f59e0b;
+    --text: #111827;
+    --text-muted: #6b7280;
+    --text-dim: #374151;
+    --negative: #dc2626;
+    --positive: #059669;
+    --header-bg: #f8f9fa;
+    --rights: #4f46e5;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; padding: 24px 16px;
+  }
+
+  .calculator-wrap { max-width: 860px; margin: 0 auto; }
+
+  .title-block {
+    margin-bottom: 10px; padding: 22px 24px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; position: relative; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .title-block::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .title-block h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+  .title-block p { margin-top: 5px; font-size: 0.78rem; color: var(--text-muted); }
+
+  .input-block {
+    margin-bottom: 10px; padding: 16px 20px;
+    background: var(--yellow-bg); border: 1.5px solid var(--yellow-border);
+    border-radius: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .input-label { font-size: 0.88rem; font-weight: 600; color: var(--yellow); white-space: nowrap; line-height: 1.4; }
+  .input-label span { display: block; font-size: 0.71rem; color: #92400e; font-weight: 400; }
+  .input-wrap { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 200px; }
+  .input-wrap input {
+    flex: 1; background: #ffffff; border: 1.5px solid var(--yellow-border);
+    border-radius: 8px; padding: 9px 13px; font-size: 1.05rem;
+    font-family: 'JetBrains Mono', monospace; font-weight: 600;
+    color: #111827 !important; -webkit-text-fill-color: #111827;
+    text-align: right; outline: none;
+    transition: box-shadow 0.2s; width: 100%;
+  }
+  .input-wrap input::placeholder { color: #d1b47a; -webkit-text-fill-color: #d1b47a; }
+  .input-wrap input:focus { box-shadow: 0 0 0 3px rgba(245,158,11,0.2); border-color: var(--yellow); }
+  .input-wrap .unit { font-size: 0.82rem; color: var(--text-muted); white-space: nowrap; }
+  .input-hint { font-size: 0.74rem; color: #92400e; padding: 5px 9px; background: rgba(245,158,11,0.1); border-radius: 6px; white-space: nowrap; }
+
+  .table-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .table-card-header {
+    padding: 12px 18px; background: var(--header-bg); border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;
+  }
+  .table-card-header .card-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .table-card-header .card-unit { font-size: 0.71rem; color: var(--text-muted); }
+
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-scroll::-webkit-scrollbar { height: 4px; }
+  .table-scroll::-webkit-scrollbar-track { background: var(--surface2); }
+  .table-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; min-width: 540px; }
+  th {
+    padding: 10px 14px; background: var(--surface2); color: var(--text-muted);
+    font-weight: 600; text-align: center; border-bottom: 1px solid var(--border); white-space: nowrap;
+    font-size: 0.78rem;
+  }
+  th:first-child { text-align: left; }
+  td {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    text-align: right; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem; font-weight: 500; color: var(--text-dim);
+  }
+  td:first-child { text-align: left; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; color: var(--text); font-size: 0.83rem; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8faff; }
+
+  .negative { color: var(--negative) !important; font-weight: 600; }
+  .positive { color: var(--positive) !important; font-weight: 600; }
+  .rights-row td { background: #eef2ff; color: var(--rights) !important; font-weight: 600; }
+  .rights-row td:first-child { color: var(--rights) !important; }
+
+  .ratio-label { font-size: 0.68rem; color: var(--text-muted); font-family: 'Noto Sans KR', sans-serif; display: block; }
+
+  .memo-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .memo-card-header {
+    padding: 12px 18px; background: var(--surface2); border-bottom: 1px solid var(--border);
+  }
+  .memo-card-header .card-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .memo-card textarea {
+    display: none;
+  }
+  .memo-content {
+    padding: 14px 18px; font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.85rem; line-height: 1.8; color: var(--text);
+    white-space: pre-line;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 14px 10px; }
+    .title-block { padding: 16px; }
+    .input-block { padding: 14px; }
+    th { padding: 8px 10px; font-size: 0.72rem; }
+    td { padding: 8px 10px; font-size: 0.82rem; }
+    .input-wrap input { font-size: 0.95rem; }
+    .table-card-header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="calculator-wrap">
+
+  <div class="title-block">
+    <h1>신흥1구역 추가분담금 계산기</h1>
+    <p>아래 노란색 칸에 나의 감평 총 금액을 입력하면 자동으로 계산됩니다.</p>
+  </div>
+
+  <div class="input-block">
+    <div class="input-label">나의 감평 총 금액<span>(토지 + 건물)</span></div>
+    <div class="input-wrap">
+      <input type="text" id="myVal" value="" placeholder="금액을 입력하세요" inputmode="numeric" autocomplete="off" />
+      <span class="unit">원</span>
+    </div>
+    <div class="input-hint">← 여기 입력</div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-card-header">
+      <span class="card-title">비례율별 분담금 추산</span>
+      <span class="card-unit">단위: 원</span>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>평형</th>
+            <th>조분가</th>
+            <th><span class="ratio-label">비례율</span>100.7%</th>
+            <th><span class="ratio-label">비례율</span>111.2%</th>
+            <th><span class="ratio-label">비례율</span>121.8%</th>
+            <th><span class="ratio-label">비례율</span>132.3%</th>
+          </tr>
+        </thead>
+        <tbody id="mainBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table style="min-width:0; width:100%;">
+        <tbody>
+          <tr><td style="text-align:left; padding: 14px 18px; word-break:keep-all; line-height:1.8; white-space:normal;">비례율 암만 좋아지면 뭐합니까? 조분가가 너무 높네요. 분담금 5억이 유언비어가 아닌 현실로...<br>평면도도 이상하게 뽑은 39타입이 분양이 잘될까요? 게다가 636세대 19%나 되는데 저게 분양이 다 되서 사업성이 나올까요...?<br>수진1 임대율 17%기준 비례율이, 신흥1 임대율 12%기준 비례율이랑 비슷하네요?<br>교통영향평가도 안해. 비행안전영향평가도 안해. 결국 토막난 저층 아파트. 사시 신청때 날아간 184세대는 돌아올까요? 주대위는 도대체 누구편입니까?<br>우리도 수진처럼 LH로 항의갑시다!!! 주대위에게 맡겨놓지말고 우리가 움직입시다!!</td></tr>
+          <tr><td style="text-align:left; padding: 14px 18px; word-break:keep-all; line-height:1.8; white-space:normal;">만든이... 주대위도 비대위도 아닌 평범한 조합원</td></tr>
+        </tbody>
+      </table>
+  </div>
+
+  <div class="table-card">
+    <div class="table-card-header">
+      <span class="card-title">분양 세대 수 및 비율</span>
+      <span class="card-unit">총 3,754세대 중 분양 3,290세대(88%), 임대 464세대(12%)</span>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>평형</th><th>세대 수 (a)</th><th>% (b)</th><th>(b) × 2,200 = (c)</th><th>(c) - (a)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>39m²</td><td>636</td><td>19.33%</td><td>425</td><td class="negative">-211</td></tr>
+          <tr><td>59m²</td><td>750</td><td>22.80%</td><td>502</td><td class="negative">-248</td></tr>
+          <tr><td>74m²</td><td>145</td><td>4.41%</td><td>97</td><td class="negative">-48</td></tr>
+          <tr><td>84m²</td><td>1,236</td><td>37.57%</td><td>827</td><td class="negative">-409</td></tr>
+          <tr><td>104m²</td><td>523</td><td>15.90%</td><td>350</td><td class="negative">-173</td></tr>
+          <tr style="background:#f8f9fa">
+            <td style="font-weight:700">합계</td>
+            <td style="font-weight:700">3,290</td>
+            <td>100%</td><td>2,200</td>
+            <td class="negative" style="font-weight:700">-1,090</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var priceData = [
+  ['39m²',  426450910],
+  ['59m²',  793701051],
+  ['74m²',  918289720],
+  ['84m²',  993967412],
+  ['104m²', 1189290753]
+];
+var ratios = [1.00701, 1.11238833333333, 1.21776666666667, 1.32314333333333];
+
+function fmt(n) {
+  if (n === null || isNaN(n)) return '-';
+  return (n < 0 ? '-' : '') + Math.abs(Math.round(n)).toLocaleString('ko-KR');
+}
+
+function getInputVal() {
+  var raw = document.getElementById('myVal').value.replace(/,/g, '');
+  var n = parseFloat(raw);
+  return isNaN(n) ? 0 : n;
+}
+
+function render() {
+  var myV = getInputVal();
+  var tbody = document.getElementById('mainBody');
+  var rows = '';
+  for (var i = 0; i < priceData.length; i++) {
+    var name = priceData[i][0];
+    var jo = priceData[i][1];
+    var cells = '<td>' + name + '</td><td>' + fmt(jo) + '</td>';
+    for (var j = 0; j < ratios.length; j++) {
+      var v = jo - myV * ratios[j];
+      var cls = v < 0 ? 'negative' : 'positive';
+      cells += '<td class="' + cls + '">' + fmt(v) + '</td>';
+    }
+    rows += '<tr>' + cells + '</tr>';
+  }
+  var rCells = '<td colspan="2" style="text-align:left;font-family:\'Noto Sans KR\',sans-serif;font-weight:600;">권리가액</td>';
+  for (var k = 0; k < ratios.length; k++) {
+    rCells += '<td>' + fmt(myV * ratios[k]) + '</td>';
+  }
+  rows += '<tr class="rights-row">' + rCells + '</tr>';
+  tbody.innerHTML = rows;
+}
+
+document.getElementById('myVal').addEventListener('input', function() {
+  var pos = this.selectionStart;
+  var raw = this.value.replace(/,/g, '');
+  if (raw === '' || raw === '-') { render(); return; }
+  var n = parseFloat(raw);
+  if (!isNaN(n)) {
+    var formatted = n.toLocaleString('ko-KR');
+    var diff = formatted.length - this.value.length;
+    this.value = formatted;
+    this.setSelectionRange(pos + diff, pos + diff);
+  }
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
