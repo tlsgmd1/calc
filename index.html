@@ -7,54 +7,35 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html, body, #page, #content, #primary, .site-content, main, .entry-content,
   .wp-site-blocks, .is-layout-flow, .wp-block-post-content,
   .site-container, #wrapper, #inner-wrap {
     background: #f5f6f8 !important;
     margin: 0 !important; padding: 0 !important; max-width: 100% !important;
   }
-
   :root {
-    --bg: #f5f6f8;
-    --surface: #ffffff;
-    --surface2: #f0f1f3;
-    --border: #e2e4e9;
-    --accent: #2563eb;
-    --accent2: #4f46e5;
-    --yellow: #d97706;
-    --yellow-bg: #fffbeb;
-    --yellow-border: #f59e0b;
-    --text: #111827;
-    --text-muted: #6b7280;
-    --text-dim: #374151;
-    --negative: #dc2626;
-    --positive: #059669;
-    --header-bg: #f8f9fa;
-    --rights: #4f46e5;
+    --bg: #f5f6f8; --surface: #ffffff; --surface2: #f0f1f3;
+    --border: #e2e4e9; --accent: #2563eb; --accent2: #4f46e5;
+    --yellow: #d97706; --yellow-bg: #fffbeb; --yellow-border: #f59e0b;
+    --text: #111827; --text-muted: #6b7280; --text-dim: #374151;
+    --negative: #dc2626; --positive: #059669;
+    --header-bg: #f8f9fa; --rights: #4f46e5;
   }
-
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--bg); color: var(--text);
-    min-height: 100vh; padding: 24px 16px;
-  }
-
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px 16px; }
   .calculator-wrap { max-width: 860px; margin: 0 auto; }
 
+  /* 타이틀 */
   .title-block {
     margin-bottom: 10px; padding: 22px 24px;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; position: relative; overflow: hidden;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   }
-  .title-block::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-  }
+  .title-block::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
   .title-block h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
   .title-block p { margin-top: 5px; font-size: 0.78rem; color: var(--text-muted); }
 
+  /* 입력 블록 */
   .input-block {
     margin-bottom: 10px; padding: 16px 20px;
     background: var(--yellow-bg); border: 1.5px solid var(--yellow-border);
@@ -69,14 +50,30 @@
     border-radius: 8px; padding: 9px 13px; font-size: 1.05rem;
     font-family: 'JetBrains Mono', monospace; font-weight: 600;
     color: #111827 !important; -webkit-text-fill-color: #111827;
-    text-align: right; outline: none;
-    transition: box-shadow 0.2s; width: 100%;
+    text-align: right; outline: none; transition: box-shadow 0.2s; width: 100%;
   }
   .input-wrap input::placeholder { color: #d1b47a; -webkit-text-fill-color: #d1b47a; }
   .input-wrap input:focus { box-shadow: 0 0 0 3px rgba(245,158,11,0.2); border-color: var(--yellow); }
   .input-wrap .unit { font-size: 0.82rem; color: var(--text-muted); white-space: nowrap; }
   .input-hint { font-size: 0.74rem; color: #92400e; padding: 5px 9px; background: rgba(245,158,11,0.1); border-radius: 6px; white-space: nowrap; }
 
+  /* 커스텀 비례율 입력 블록 */
+  .custom-ratio-block {
+    margin-bottom: 10px; padding: 14px 20px;
+    background: #f0f4ff; border: 1.5px solid #93c5fd;
+    border-radius: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .custom-ratio-block .input-label { color: #1d4ed8; }
+  .custom-ratio-block .input-label span { color: #3b5fa0; }
+  .custom-ratio-block .input-wrap input {
+    border-color: #93c5fd; color: #1e3a8a !important; -webkit-text-fill-color: #1e3a8a;
+  }
+  .custom-ratio-block .input-wrap input::placeholder { color: #93c5fd; -webkit-text-fill-color: #93c5fd; }
+  .custom-ratio-block .input-wrap input:focus { box-shadow: 0 0 0 3px rgba(59,130,246,0.2); border-color: #3b82f6; }
+  .custom-ratio-block .input-hint { color: #1d4ed8; background: rgba(59,130,246,0.1); }
+
+  /* 카드 */
   .table-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; overflow: hidden; margin-bottom: 10px;
@@ -89,71 +86,81 @@
   .table-card-header .card-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
   .table-card-header .card-unit { font-size: 0.71rem; color: var(--text-muted); }
 
+  /* 순위 카드 */
+  .rank-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden;
+  }
+  .rank-card-header {
+    padding: 12px 18px; background: var(--header-bg); border-bottom: 1px solid var(--border);
+  }
+  .rank-card-header .card-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .rank-body { padding: 16px 20px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  .rank-item { display: flex; flex-direction: column; gap: 3px; }
+  .rank-item .rank-label { font-size: 0.72rem; color: var(--text-muted); }
+  .rank-item .rank-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+  .rank-item .rank-value.empty { color: var(--text-muted); font-size: 0.85rem; font-family: 'Noto Sans KR', sans-serif; font-weight: 400; }
+  .rank-divider { width: 1px; height: 40px; background: var(--border); }
+
+  /* 테이블 */
   .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .table-scroll::-webkit-scrollbar { height: 4px; }
   .table-scroll::-webkit-scrollbar-track { background: var(--surface2); }
   .table-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
   table { width: 100%; border-collapse: collapse; font-size: 0.83rem; min-width: 540px; }
-  th {
-    padding: 10px 14px; background: var(--surface2); color: var(--text-muted);
-    font-weight: 600; text-align: center; border-bottom: 1px solid var(--border); white-space: nowrap;
-    font-size: 0.78rem;
-  }
+  th { padding: 10px 14px; background: var(--surface2); color: var(--text-muted); font-weight: 600; text-align: center; border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 0.78rem; }
   th:first-child { text-align: left; }
-  td {
-    padding: 10px 14px; border-bottom: 1px solid var(--border);
-    text-align: right; font-family: 'JetBrains Mono', monospace;
-    font-size: 0.88rem; font-weight: 500; color: var(--text-dim);
-  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; font-weight: 500; color: var(--text-dim); }
   td:first-child { text-align: left; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; color: var(--text); font-size: 0.83rem; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: #f8faff; }
-
   .negative { color: var(--negative) !important; font-weight: 600; }
   .positive { color: var(--positive) !important; font-weight: 600; }
   .rights-row td { background: #eef2ff; color: var(--rights) !important; font-weight: 600; }
   .rights-row td:first-child { color: var(--rights) !important; }
-
   .ratio-label { font-size: 0.68rem; color: var(--text-muted); font-family: 'Noto Sans KR', sans-serif; display: block; }
+  .custom-col { color: #1d4ed8 !important; }
+  .custom-col.negative { color: var(--negative) !important; }
+  .custom-col.positive { color: var(--positive) !important; }
 
-  .memo-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; overflow: hidden; margin-bottom: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  }
-  .memo-card-header {
-    padding: 12px 18px; background: var(--surface2); border-bottom: 1px solid var(--border);
-  }
-  .memo-card-header .card-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-  .memo-card textarea {
-    display: none;
-  }
-  .memo-content {
-    padding: 14px 18px; font-family: 'Noto Sans KR', sans-serif;
-    font-size: 0.85rem; line-height: 1.8; color: var(--text);
-    white-space: pre-line;
-  }
+  /* 확률 바 */
+  .prob-row td:first-child { font-weight: 600; }
+  .prob-bar-wrap { display: flex; align-items: center; gap: 8px; min-width: 160px; }
+  .prob-bar-bg { flex: 1; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
+  .prob-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s; }
+  .prob-val { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 600; white-space: nowrap; min-width: 42px; text-align: right; }
+  .prob-high { color: #059669; }
+  .prob-mid { color: #d97706; }
+  .prob-low { color: #dc2626; }
+
+  /* 공지 표 */
+  .notice-table { min-width: 0 !important; }
+  .notice-td { text-align: left !important; font-family: 'Noto Sans KR', sans-serif !important; padding: 14px 18px !important; word-break: keep-all; line-height: 1.8; white-space: normal; font-size: 0.85rem !important; color: var(--text) !important; }
 
   @media (max-width: 600px) {
     body { padding: 14px 10px; }
     .title-block { padding: 16px; }
-    .input-block { padding: 14px; }
+    .input-block, .custom-ratio-block { padding: 14px; }
     th { padding: 8px 10px; font-size: 0.72rem; }
     td { padding: 8px 10px; font-size: 0.82rem; }
     .input-wrap input { font-size: 0.95rem; }
     .table-card-header { flex-direction: column; align-items: flex-start; }
+    .rank-body { gap: 12px; }
+    .prob-bar-wrap { min-width: 100px; }
   }
 </style>
 </head>
 <body>
 <div class="calculator-wrap">
 
+  <!-- 제목 -->
   <div class="title-block">
     <h1>신흥1구역 추가분담금 계산기</h1>
     <p>아래 노란색 칸에 나의 감평 총 금액을 입력하면 자동으로 계산됩니다.</p>
   </div>
 
+  <!-- 감평 금액 입력 -->
   <div class="input-block">
     <div class="input-label">나의 감평 총 금액<span>(토지 + 건물)</span></div>
     <div class="input-wrap">
@@ -163,6 +170,29 @@
     <div class="input-hint">← 여기 입력</div>
   </div>
 
+  <!-- 커스텀 비례율 입력 -->
+  <div class="custom-ratio-block">
+    <div class="input-label" style="color:#1d4ed8">직접 비례율 입력<span style="color:#3b5fa0">(% 숫자만 입력)</span></div>
+    <div class="input-wrap">
+      <input type="text" id="customRatio" value="" placeholder="예: 115.5" inputmode="decimal" autocomplete="off" />
+      <span class="unit">%</span>
+    </div>
+    <div class="input-hint" style="color:#1d4ed8; background:rgba(59,130,246,0.1);">← 비례율 직접 입력</div>
+  </div>
+
+  <!-- 순위 추산 -->
+  <div class="rank-card">
+    <div class="rank-card-header"><span class="card-title">나의 감평가액 순위 추산 (총 2,200명 기준)</span></div>
+    <div class="rank-body" id="rankBody">
+      <div class="rank-item"><span class="rank-label">상위</span><span class="rank-value empty" id="rankPct">금액을 입력하세요</span></div>
+      <div class="rank-divider"></div>
+      <div class="rank-item"><span class="rank-label">약 순위</span><span class="rank-value empty" id="rankNum">-</span></div>
+      <div class="rank-divider"></div>
+      <div class="rank-item"><span class="rank-label">구간</span><span class="rank-value empty" id="rankRange">-</span></div>
+    </div>
+  </div>
+
+  <!-- 비례율별 분담금 추산 -->
   <div class="table-card">
     <div class="table-card-header">
       <span class="card-title">비례율별 분담금 추산</span>
@@ -178,6 +208,7 @@
             <th><span class="ratio-label">비례율</span>111.2%</th>
             <th><span class="ratio-label">비례율</span>121.8%</th>
             <th><span class="ratio-label">비례율</span>132.3%</th>
+            <th id="customRatioHeader"><span class="ratio-label">직접입력</span>-</th>
           </tr>
         </thead>
         <tbody id="mainBody"></tbody>
@@ -185,26 +216,49 @@
     </div>
   </div>
 
+  <!-- 공지 표 -->
   <div class="table-card">
-    <table style="min-width:0; width:100%;">
-        <tbody>
-          <tr><td style="text-align:left; padding: 14px 18px; word-break:keep-all; line-height:1.8; white-space:normal;">비례율 암만 좋아지면 뭐합니까? 조분가가 너무 높네요. 분담금 5억이 유언비어가 아닌 현실로...<br>거실분리형 원룸인 39타입이 분양이 잘될까요? 게다가 636세대 19%나 되는데 저게 분양이 다 되서 사업성이 나올까요...?<br>수진1 임대율 17%기준 비례율이, 신흥1 임대율 12%기준 비례율이랑 비슷하네요?<br>교통영향평가도 안해. 비행안전영향평가도 안해. 결국 토막난 저층 아파트. 사시 신청때 날아간 184세대는 돌아올까요? 주대위는 도대체 누구편입니까?<br>우리도 수진처럼 LH로 항의갑시다!!! 주대위에게 맡겨놓지말고 우리가 움직입시다!!</td></tr>
-          <tr><td style="text-align:left; padding: 14px 18px; word-break:keep-all; line-height:1.8; white-space:normal;">만든이... 주대위도 비대위도 아닌 평범한 조합원</td></tr>
-        </tbody>
-      </table>
+    <table class="notice-table" style="width:100%;">
+      <tbody>
+        <tr><td class="notice-td">비례율 암만 좋아지면 뭐합니까? 조분가가 너무 높네요. 분담금 5억이 유언비어가 아닌 현실로...<br>거실분리형 원룸인 39타입이 분양이 잘될까요? 게다가 636세대 19%나 되는데 저게 분양이 다 되서 사업성이 나올까요...?<br>수진1 임대율 17%기준 비례율이, 신흥1 임대율 12%기준 비례율이랑 비슷하네요?<br>교통영향평가도 안해. 비행안전영향평가도 안해. 결국 토막난 저층 아파트. 사시 신청때 날아간 184세대는 돌아올까요? 주대위는 도대체 누구편입니까?<br>우리도 수진처럼 LH로 항의갑시다!!! 주대위에게 맡겨놓지말고 우리가 움직입시다!!</td></tr>
+        <tr><td class="notice-td">만든이... 주대위도 비대위도 아닌 평범한 조합원</td></tr>
+      </tbody>
+    </table>
   </div>
 
+  <!-- 조합원 배정 세대 및 당첨 확률 -->
   <div class="table-card">
     <div class="table-card-header">
-      <span class="card-title">분양 세대 수 및 비율</span>
-      <span class="card-unit">총 3,754세대 중 분양 3,290세대(88%), 임대 464세대(12%), 조합원 수 약 2,200명</span>
+      <span class="card-title">평형별 당첨 가능성 추산</span>
+      <span class="card-unit">조합원 배정 세대 기준 / 선호도 가중치 반영</span>
     </div>
     <div class="table-scroll">
       <table>
         <thead>
           <tr>
-            <th>평형</th><th>세대 수 (a)</th><th>% (b)</th><th>(b) × 2,200 = (c)</th><th>(c) - (a)</th>
+            <th>평형</th>
+            <th>전체세대</th>
+            <th>조합원배정</th>
+            <th>선호도</th>
+            <th>예상경쟁률</th>
+            <th>당첨가능성</th>
           </tr>
+        </thead>
+        <tbody id="probBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 분양 세대 수 및 비율 -->
+  <div class="table-card">
+    <div class="table-card-header">
+      <span class="card-title">분양 세대 수 및 비율</span>
+      <span class="card-unit">총 3,754세대 중 분양 3,290세대(88%), 임대 464세대(12%)</span>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>평형</th><th>세대 수 (a)</th><th>% (b)</th><th>(b) × 2,200 = (c)</th><th>(c) - (a)</th></tr>
         </thead>
         <tbody>
           <tr><td>39m²</td><td>636</td><td>19.33%</td><td>425</td><td class="negative">-211</td></tr>
@@ -213,10 +267,8 @@
           <tr><td>84m²</td><td>1,236</td><td>37.57%</td><td>827</td><td class="negative">-409</td></tr>
           <tr><td>104m²</td><td>523</td><td>15.90%</td><td>350</td><td class="negative">-173</td></tr>
           <tr style="background:#f8f9fa">
-            <td style="font-weight:700">합계</td>
-            <td style="font-weight:700">3,290</td>
-            <td>100%</td><td>2,200</td>
-            <td class="negative" style="font-weight:700">-1,090</td>
+            <td style="font-weight:700">합계</td><td style="font-weight:700">3,290</td>
+            <td>100%</td><td>2,200</td><td class="negative" style="font-weight:700">-1,090</td>
           </tr>
         </tbody>
       </table>
@@ -226,15 +278,38 @@
 </div>
 
 <script>
+// ── 기본 데이터 ──────────────────────────────
 var priceData = [
-  ['39m²',  426450910],
-  ['59m²',  793701051],
-  ['74m²',  918289720],
-  ['84m²',  993967412],
-  ['104m²', 1189290753]
+  ['39m²',  426450910,  636, 5,  0.60, 0.01],
+  ['59m²',  793701051,  750, 5,  0.60, 0.13],
+  ['74m²',  918289720,  145, 2,  0.60, 0.13],
+  ['84m²',  993967412, 1236, 3,  0.60, 0.60],
+  ['104m²', 1189290753, 523, 4,  0.60, 0.13]
 ];
-var ratios = [1.00701, 1.11238833333333, 1.21776666666667, 1.32314333333333];
+// [이름, 조분가, 전체세대, 최소층, (사용안함), 선호도가중치]
 
+var ratios = [1.00701, 1.11238833333333, 1.21776666666667, 1.32314333333333];
+var TOTAL_FLOORS = 15;
+var TOTAL_PEOPLE = 2200;
+
+// 백분위 표
+var percentileData = [
+  {pct: 1,  rank: 22,   val: 1872772150},
+  {pct: 5,  rank: 112,  val: 968044560},
+  {pct: 10, rank: 223,  val: 701362180},
+  {pct: 20, rank: 447,  val: 604431100},
+  {pct: 30, rank: 670,  val: 562565910},
+  {pct: 40, rank: 894,  val: 537316660},
+  {pct: 45, rank: 1005, val: 525576740},
+  {pct: 50, rank: 1117, val: 516469440},
+  {pct: 55, rank: 1229, val: 508552000},
+  {pct: 60, rank: 1340, val: 501313710},
+  {pct: 70, rank: 1564, val: 484461635},
+  {pct: 80, rank: 1787, val: 463581840},
+  {pct: 90, rank: 2011, val: 384500000}
+];
+
+// ── 유틸 함수 ────────────────────────────────
 function fmt(n) {
   if (n === null || isNaN(n)) return '-';
   return (n < 0 ? '-' : '') + Math.abs(Math.round(n)).toLocaleString('ko-KR');
@@ -246,8 +321,104 @@ function getInputVal() {
   return isNaN(n) ? 0 : n;
 }
 
+function getCustomRatio() {
+  var raw = document.getElementById('customRatio').value.replace(/,/g, '');
+  var n = parseFloat(raw);
+  return isNaN(n) ? null : n / 100;
+}
+
+// ── 조합원 배정 세대 계산 ────────────────────
+function calcAssigned(totalUnits, minFloor) {
+  var eligibleFloors = TOTAL_FLOORS - minFloor + 1;
+  return Math.round(totalUnits * eligibleFloors / TOTAL_FLOORS);
+}
+
+// ── 순위 추산 ────────────────────────────────
+function calcRank(myVal) {
+  if (!myVal) return null;
+  // 내 값보다 높은 구간 찾기
+  for (var i = 0; i < percentileData.length; i++) {
+    if (myVal >= percentileData[i].val) {
+      if (i === 0) {
+        return { pct: '1% 이내', rank: '22등 이내', range: '상위 1%' };
+      }
+      var upper = percentileData[i-1];
+      var lower = percentileData[i];
+      // 선형 보간
+      var ratio = (myVal - lower.val) / (upper.val - lower.val);
+      var estRank = Math.round(lower.rank - ratio * (lower.rank - upper.rank));
+      var estPct = (lower.pct - ratio * (lower.pct - upper.pct)).toFixed(1);
+      return {
+        pct: '상위 ' + estPct + '%',
+        rank: '약 ' + estRank.toLocaleString('ko-KR') + '등',
+        range: upper.pct + '% ~ ' + lower.pct + '%'
+      };
+    }
+  }
+  return { pct: '하위 10%', rank: '약 2,011등 이하', range: '하위권' };
+}
+
+// ── 내 순위 숫자 추출 ────────────────────────
+function getMyRankNum(myVal) {
+  if (!myVal) return TOTAL_PEOPLE;
+  for (var i = 0; i < percentileData.length; i++) {
+    if (myVal >= percentileData[i].val) {
+      if (i === 0) return 11;
+      var upper = percentileData[i-1];
+      var lower = percentileData[i];
+      var r = (myVal - lower.val) / (upper.val - lower.val);
+      return Math.round(lower.rank - r * (lower.rank - upper.rank));
+    }
+  }
+  return TOTAL_PEOPLE;
+}
+
+// ── 당첨 확률 계산 ───────────────────────────
+function calcProb(myVal) {
+  if (!myVal) return null;
+
+  var myRankNum = getMyRankNum(myVal);
+  var peopleAhead = myRankNum - 1;
+
+  var weights = { '84m²': 0.60, '74m²': 0.13, '104m²': 0.13, '59m²': 0.13, '39m²': 0.01 };
+
+  var assigned = {};
+  for (var j = 0; j < priceData.length; j++) {
+    assigned[priceData[j][0]] = calcAssigned(priceData[j][2], priceData[j][3]);
+  }
+
+  var results = {};
+  for (var nm in assigned) {
+    // 내 앞 사람들이 이 타입 선택한 수
+    var takenByAhead = Math.round(peopleAhead * weights[nm]);
+    // 남은 자리
+    var remaining = Math.max(0, assigned[nm] - takenByAhead);
+    // 남은 자리가 있으면 당첨 가능 → 남은 비율로 확률 계산
+    var prob = remaining > 0 ? Math.min(100, Math.round((remaining / assigned[nm]) * 100)) : 0;
+    results[nm] = {
+      prob: prob,
+      assigned: assigned[nm],
+      takenByAhead: takenByAhead,
+      remaining: remaining
+    };
+  }
+  return results;
+}
+
+// ── 렌더링 ───────────────────────────────────
 function render() {
   var myV = getInputVal();
+  var customR = getCustomRatio();
+
+  // 커스텀 비례율 헤더
+  var hdr = document.getElementById('customRatioHeader');
+  if (customR) {
+    hdr.innerHTML = '<span class="ratio-label">직접입력</span>' + (customR * 100).toFixed(1) + '%';
+  } else {
+    hdr.innerHTML = '<span class="ratio-label">직접입력</span>-';
+  }
+
+  // 분담금 표
   var tbody = document.getElementById('mainBody');
   var rows = '';
   for (var i = 0; i < priceData.length; i++) {
@@ -256,32 +427,104 @@ function render() {
     var cells = '<td>' + name + '</td><td>' + fmt(jo) + '</td>';
     for (var j = 0; j < ratios.length; j++) {
       var v = jo - myV * ratios[j];
-      var cls = v < 0 ? 'negative' : 'positive';
-      cells += '<td class="' + cls + '">' + fmt(v) + '</td>';
+      cells += '<td class="' + (v < 0 ? 'negative' : 'positive') + '">' + fmt(v) + '</td>';
+    }
+    // 커스텀 비례율 컬럼
+    if (customR) {
+      var vc = jo - myV * customR;
+      cells += '<td class="custom-col ' + (vc < 0 ? 'negative' : 'positive') + '">' + fmt(vc) + '</td>';
+    } else {
+      cells += '<td style="color:#9ca3af">-</td>';
     }
     rows += '<tr>' + cells + '</tr>';
   }
+
+  // 권리가액 행
   var rCells = '<td colspan="2" style="text-align:left;font-family:\'Noto Sans KR\',sans-serif;font-weight:600;">권리가액</td>';
   for (var k = 0; k < ratios.length; k++) {
     rCells += '<td>' + fmt(myV * ratios[k]) + '</td>';
   }
+  if (customR) {
+    rCells += '<td class="custom-col">' + fmt(myV * customR) + '</td>';
+  } else {
+    rCells += '<td style="color:#9ca3af">-</td>';
+  }
   rows += '<tr class="rights-row">' + rCells + '</tr>';
   tbody.innerHTML = rows;
+
+  // 순위 추산
+  var rankInfo = calcRank(myV);
+  if (rankInfo && myV) {
+    document.getElementById('rankPct').textContent = rankInfo.pct;
+    document.getElementById('rankPct').className = 'rank-value';
+    document.getElementById('rankNum').textContent = rankInfo.rank;
+    document.getElementById('rankNum').className = 'rank-value';
+    document.getElementById('rankRange').textContent = rankInfo.range;
+    document.getElementById('rankRange').className = 'rank-value';
+  } else {
+    document.getElementById('rankPct').textContent = '금액을 입력하세요';
+    document.getElementById('rankPct').className = 'rank-value empty';
+    document.getElementById('rankNum').textContent = '-';
+    document.getElementById('rankNum').className = 'rank-value empty';
+    document.getElementById('rankRange').textContent = '-';
+    document.getElementById('rankRange').className = 'rank-value empty';
+  }
+
+  // 당첨 확률 표
+  var preferOrder = ['84m²', '74m²', '104m²', '59m²', '39m²'];
+  var probResults = myV ? calcProb(myV) : null;
+  var pbody = document.getElementById('probBody');
+  var prows = '';
+
+  for (var pi = 0; pi < priceData.length; pi++) {
+    var pname = priceData[pi][0];
+    var ptotal = priceData[pi][2];
+    var pmin = priceData[pi][3];
+    var passigned = calcAssigned(ptotal, pmin);
+    var pweight = priceData[pi][5];
+    var prefer = Math.round(pweight * 100) + '%';
+
+    var probVal = probResults ? probResults[pname] : null;
+    var probNum = probVal ? probVal.prob : 0;
+    var probCls = probNum >= 70 ? 'prob-high' : probNum >= 40 ? 'prob-mid' : 'prob-low';
+    var barColor = probNum >= 70 ? '#059669' : probNum >= 40 ? '#d97706' : '#dc2626';
+    var probDisplay = myV ? (probNum + '%') : '-';
+
+    // 경쟁률: 앞 사람 중 이 타입 원하는 수 / 배정 세대
+    var compRate = probVal ? (probVal.takenByAhead / Math.max(1, probVal.assigned)).toFixed(1) + ':1' : '-';
+
+    prows += '<tr class="prob-row">' +
+      '<td>' + pname + '</td>' +
+      '<td>' + ptotal.toLocaleString('ko-KR') + '</td>' +
+      '<td>' + passigned.toLocaleString('ko-KR') + '</td>' +
+      '<td>' + prefer + '</td>' +
+      '<td>' + compRate + '</td>' +
+      '<td><div class="prob-bar-wrap">' +
+        '<div class="prob-bar-bg"><div class="prob-bar-fill" style="width:' + (myV ? probNum : 0) + '%;background:' + barColor + '"></div></div>' +
+        '<span class="prob-val ' + (myV ? probCls : '') + '">' + probDisplay + '</span>' +
+      '</div></td>' +
+      '</tr>';
+  }
+  pbody.innerHTML = prows;
 }
 
-document.getElementById('myVal').addEventListener('input', function() {
-  var pos = this.selectionStart;
-  var raw = this.value.replace(/,/g, '');
+// ── 이벤트 ───────────────────────────────────
+function fmtInput(el) {
+  var pos = el.selectionStart;
+  var raw = el.value.replace(/,/g, '');
   if (raw === '' || raw === '-') { render(); return; }
   var n = parseFloat(raw);
   if (!isNaN(n)) {
     var formatted = n.toLocaleString('ko-KR');
-    var diff = formatted.length - this.value.length;
-    this.value = formatted;
-    this.setSelectionRange(pos + diff, pos + diff);
+    var diff = formatted.length - el.value.length;
+    el.value = formatted;
+    el.setSelectionRange(pos + diff, pos + diff);
   }
   render();
-});
+}
+
+document.getElementById('myVal').addEventListener('input', function() { fmtInput(this); });
+document.getElementById('customRatio').addEventListener('input', function() { render(); });
 
 render();
 </script>
